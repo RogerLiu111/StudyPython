@@ -302,4 +302,102 @@
             # 静态方法
             Person.say()
             aa.say()
+
+# 12.变量的三种操作
+- 赋值
+- 读取
+- 删除
+    
+        a.name = "abc" # 赋值
+        print(a.name) # 读取
+        del a.name # 删除
+        
+- 类属性 property
+    - 应用场景：
+        - 对变量除了普通的三种操作，还想增加一些附加的操作，那么可以通过property完成
+            
+                class A():
+                    def __init__(self):
+                        self.name = "gg"
+                        self.age = 18
+                    # 此功能，是对类变量进行读取操作的时候应该执行的函数功能
+                    def fget(self):
+                        print("我被读取了")
+                        return self.name
+                    # 模拟的是对变量进行写操作的时候执行的功能
+                    def fset(self,name):
+                        print("我被写入了,但是还可以做好多事情")
+                        self.name = "gggg" + name
+                    # 模拟的是删除变量的时候进行的操作    
+                    def fdel(self):
+                        pass
+                    # property的四个参数顺序是固定的
+                    # 第一个参数代表读取的时候需要调用的函数
+                    # 第二个参数代表写入的时候需要调用的函数
+                    # 第三个参数是删除的时候需要调用的函数
+                    # 第四个是调用函数说明    
+                    name2 = property(fget, fset, fdel, "这是一个property的例子")
+                a = A()
+                print(a.name)
+                print(a.name2)
+                
+# 13.抽象类
+- 抽象方法：没有具体实现内容的方法为抽象方法
+- 抽象方法的主要意义是规范了子类的行为和接口
+- 抽象类的使用需要借助abc模块
+    
+        import abc
+        # 声明一个抽象类并且指定当前类的元类
+        class Human（metaclass = abc.ABCMeta）:
+        
+            # 定义一个抽象的方法
+            @abc.abstractmethod
+            def smoking(self):
+                pass
+                
+            # 定义类抽象方法
+            @abc.abstractclassmethod
+            def drink():
+                pass
+                
+            # 定义静态抽象方法
+            @abc.abstractclassmethod
+            def play():
+                pass
+                
+            def sleep(self):
+                print("sleeping...")
+                
+- 抽象类：包含抽象方法的类叫抽象类，通常称为abc类
+- 抽象类的使用
+    - 抽象类可以包含抽象方法，也可以包含具体方法
+    - 抽象类中可以有方法也可以有属性
+    - 抽象类不允许直接实例化
+    - 必须继承才可以使用，且继承的子类必须实现所有继承来的抽象方法
+    - 假定子类没有实现所有继承的抽象方法，则子类也不能实例化
+    - 抽象类的主要作用是设定类的标准，以便于开发的时候具有统一的规范
+
+# 14.自定义类
+- 类其实是一个类定义和各种方法的自由组合
+- 可以定义类和函数，然后自己通过类直接赋值
+- 可以借助于MethodType实现
+- 借助于type实现
+- 利用元类实现
+    - Metaclass
+    - 元类是类
+    - 用来创造别的类的类
+    
+        # 元类写法是固定的，必须继承自type
+        # 元类一般明明以Metaclass结果
+        class xxxMetaClass(type):
+            # 注意一下写法
+            def __new__(cls, name, bases, attrs)
+                # 自己的业务处理
+                
+                return type.__new__(cls, name, bases, attrs)
+                
+        # 元类定义完就可以使用，使用注意写法
+        class Teacher(object, metaclass=xxxMetaClass):
+            pass
+                 
             
