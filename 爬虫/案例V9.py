@@ -27,12 +27,17 @@ if __name__ == '__main__':
         # 正常访问
         # 服务器发送给浏览器压缩文件，使用以下方法解压文件才能读取文件。否则压缩过的文件只使用UTF-8解码不了
         rsp = request.urlopen(req)
-        html = rsp.read()               # 此处html是压缩过的数据
-        buff = BytesIO(html)            # 把html转为文件对象
-        f = gzip.GzipFile(fileobj=buff)
-        res = f.read().decode()
-        print(type(res))
-        print(res)
+        html = rsp.read().decode()
+        print(type(html))
+        print(html)
+
+        # rsp = request.urlopen(req)
+        # html = rsp.read()               # 此处html是压缩过的数据
+        # buff = BytesIO(html)            # 把html转为文件对象
+        # f = gzip.GzipFile(fileobj=buff)
+        # res = f.read().decode()
+        # print(type(res))
+        # print(res)
 
     except error.HTTPError as e:
         print(e)
