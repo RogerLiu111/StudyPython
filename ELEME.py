@@ -29,7 +29,7 @@ def login():
     '''
 
     # 此url需要从登陆form的action属性中提取
-    url = "https://melody.shop.ele.me/login"
+    url = "https://app-api.shop.ele.me/arena/invoke/?method=LoginService.loginByUsername"
 
     headers = {}
     headers['User-Agent'] = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1"
@@ -59,23 +59,28 @@ def login():
     #     "service":"LoginService"
     # }
 
-    metas ={
-        "appName":"melody",
-        "appVersion": "4.4.0"
-    }
-    params = {
-        "username": "chaofun222",
-        "password": "chaofun222",
-        "captchaCode": "",
-        "loginedSessionIds": []
-    }
+    # metas ={
+    #     "appName":"melody",
+    #     "appVersion": "4.4.0"
+    # }
+    # params = {
+    #     "username": "chaofun222",
+    #     "password": "chaofun222",
+    #     "captchaCode": "",
+    #     "loginedSessionIds": []
+    # }
+    # data = {
+    #     "id":"654241d0-9adb-4e0b-9ff2-a24568a9a1cb",
+    #     "metas":metas,
+    #     "method":"loginByUsername",
+    #     "ncp":"2.0.0",
+    #     "params":params,
+    #     "service":"LoginService"
+    # }
+
     data = {
-        "id":"654241d0-9adb-4e0b-9ff2-a24568a9a1cb",
-        "metas":metas,
-        "method":"loginByUsername",
-        "ncp":"2.0.0",
-        "params":params,
-        "service":"LoginService"
+        "password": "chaofun222",
+        "username": "chaofun222"
     }
 
     # 把数据进行编码
@@ -83,6 +88,7 @@ def login():
 
     # 创建一个请求对象
     req = request.Request(url, data=data.encode(), headers=headers)
+    # req = request.Request(url, data=data.encode())
 
     # 使用 opener 发起请求
     rsp = opener.open(req)
@@ -93,8 +99,9 @@ def get_JSJLD_Page():
     # 如果已经执行了login函数,则opener自动已经包含了相应的cookie值
     rsp_dashboard = opener.open(url_dashboard)
     html_dashboard = rsp_dashboard.read().decode()
-    with open("jsjld.html","w") as f:
-        f.write(html_dashboard)
+    # with open("jsjld.html","w") as f:
+    #     f.write(html_dashboard)
+    print(html_dashboard)
 
     '''
     url_vas = "https://melody.shop.ele.me/app/shop/2320841/vas"
@@ -110,4 +117,4 @@ if __name__ == '__main__':
     我们尝试把cookie打印出来
     '''
     login()
-    #get_JSJLD_Page()
+    get_JSJLD_Page()
