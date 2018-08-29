@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+
+<bookstore>
+    <book category="cooking">
+        <title lang="en">Everyday Italian</title>
+        <author>Gidaa faaa</author>
+        <year>2018</year>
+        <price>83</price>
+    </book>
+
+    <book category="education">
+        <title lang="en">Python</title>
+        <author>Gliufff</author>
+        <year>2098</year>
+        <price>88</price>
+    </book>
+
+    <book category="sport">
+        <title lang="en">running</title>
+        <author>Gidddf kuka</author>
+        <year>2010</year>
+        <price>89</price>
+    </book>
+</bookstore>
