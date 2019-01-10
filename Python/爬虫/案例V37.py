@@ -3,11 +3,11 @@ import time
 from selenium.webdriver.common.keys import Keys
 
 # 可能需要手动添加路径
-driver = webdriver.Chrome()
+driver = webdriver.Chrome("C:\Program Files (x86)\Google\Chrome\Application\Chromedriver.exe")
 
-url = "http://www.baidu.com"
+# url = "http://www.baidu.com/"
 
-driver.get(url)
+driver.get("http://www.baidu.com/")
 
 text = driver.find_element_by_id('wrapper').text
 
