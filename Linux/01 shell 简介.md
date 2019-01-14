@@ -3,9 +3,9 @@
 ## 作用：是内核与用户的一种接口
 ### Shell命令解释器
 - Shell一种解释型的语言（内部命令/外部命令）
-
-		内部命令：系统自带的，随系统内核一起启动（56种） cd（改变路径）
-		外部命令：就是一些额外的软件或者程序 ls（列出文件或者目录）
+    - 内部命令：系统自带的，随系统内核一起启动（56种） cd（改变路径）
+	- 外部命令：就是一些额外的软件或者程序 ls（列出文件或者目录）
+            
             sh （Borurne Shell）	csh		ksh
             *BASH 是rhel中默认的一种shell
 	
@@ -16,15 +16,17 @@
                 #：代表当前登录用户是管理员用户
                     root：管理员 administrator（windows中的管理员账号）
                 [root@192 ~]# su - student
-	1.		su - username：切换当前登录				由root用户切换普通用户不需要密码
+			
+	        1.su - username：切换当前登录				由root用户切换普通用户不需要密码
 				有[-]：代表连同bash环境一起切换		由普通用户切换root用户需要密码
 				没有[-]：代表仅切换用户，但bash环境不切换
+           
             [student@192 ~]$ 
             $：代表当前登录用户是普通用户
 		
-	2.		exit：退出登录/退出终端
-	3.		hostname：查看系统当前主机名
-	4.		hostnamectl set-hostname ****	更换主机名为“****”
+	        2.exit：退出登录/退出终端
+	        3.hostname：查看系统当前主机名
+	        4.hostnamectl set-hostname ****	更换主机名为“****”
 				切换完成后，bash界面内不会立即更新，使用“su -”命令，切换用户，“-”后什么都不跟意思是切换root用户
 				
 				[root@192 ~]# hostnamectl set-hostname rr
@@ -33,19 +35,19 @@
 				[root@192 ~]# su -
 				Last login: Mon Jan  7 16:26:27 CST 2019 on pts/0
 				[root@rr ~]# 
-    5.	    关机操作方法：
+            5.关机操作方法：
                 poweroff
                 init 0
                 shutdown -h now现在关机（可以设置延时关机）
                 halt
-	6.	    重启操作方法：
+	        6.重启操作方法：
                 reboot
                 shutdown -r now现在重启（可以设置延时重启）
                 shutdown -r +15（15分钟后重启）
-    7.	    data：查看当前系统时间
+            7.data：查看当前系统时间
                 [root@rr ~]# date
                 Mon Jan  7 16:38:02 CST 2019
-	8.	    cal：查看日历
+	        8.cal：查看日历
                 cal 年份		查看全年日历
                 cal 月份 年份 	查看某年某月的日历
                     [root@rr ~]# cal
@@ -109,7 +111,8 @@
 		在Linux当中一切皆文本
 		
 ## 网络通讯的三种方法(有关于虚拟机VMWare的网络使用)
-	    查看当前IP地址
+- 查看当前IP地址
+        
         ifconfig：查看IP网络环境
             ping ***.***.***.***
             如果不设定次数，icm包会一直获取，按“ctrl+c”结束该指令
