@@ -2,7 +2,7 @@
     在windows下，安装软件".exe"双击运行即可。
     Linux中，软件包封装类型多样
 
-- 常见的软件包封装类型：
+## 常见的软件包封装类型：
     - rpm软件包 扩展名为  .rpm
     - deb软件包 扩展名为  .deb
     - 源代码软件包    一般为.tar.gz或者.tar.bz2格式的压缩包，包含程序源代码 README
@@ -120,7 +120,72 @@
         example：
             1.安装vmware tools
             2.NTFS-3g
+            
+## Linux常用软件包的安装
+- 用户组管理软件system-config-users
+        
+        1.配置yum源    
+                cd /etc/yum.repos.d
+                rm -rf *                                # 清空原先有yum源文件".repo"
+                vim dvd.repo                            # 自己新建yum源文件,以".repo"结尾
+                        [dvd]                           # yum标识
+                        name = dvd                      # yum名称
+                        baseurl = file:///mnt/cdrom     # yum路径
+                        gpgcheck = 0                    # 不调用yum软件签名信息
+                        enabled = 1                     # 开机自启
+        2.挂载yum文件
+                mkdir /mnt/cdrom                        
+                mount /dev/cdrom /mnt/cdrom             # 将光盘内的文件挂载到Linux设备中去
+                yum clean all                           # 清除yum缓存
+                yum repolist all                        # 查看yum状态
+                yum list all                            # 查看yum软件包状态
+        3.安装yum中的软件包
+                yum search "system-config-users"        # 查看yum中是否有我要安装的软件包
+                yum install system-config-users -y      # 安装软件包
+                在左上角applications菜单里，找到sundry，里面如果有一个软件，"Users and Groups"说明安装完成
+                
+- RHEL/CentOS环境下安装Python3
+    - Python3的安装
     
-
+            1.准备必要的安装文件包括库文件
+                yum install zlib-devel openssl-devel -y
+                yum groups install development -y
+                yum install libffi-devel -y                 # 安装python3.7以上版本时，需要额外装此包，作为依赖
+            2.进入源代码包编译环境
+                ./configure prefix=/usr/local/python3
+            3.编译安装
+                make && make install
+            4.添加bin目录到环境变量
+                vim /etc/profile
+                export PATH="$PATH:/usr/local/python3/bin"
+                source /etc/profile                         # 让配置文件立即生效（这条指令不输入，输入python3指令不能立刻找到python3）
+            5.升级pip
+                pip3 install --upgrade pip 
+            6.修改命令链接(可选)                            # 最好别改，改了yum路径有问题
+                rm -rf /usr/bin/python                      # 这是原来系统中存在的python2的快捷方式，装了python3之后，可能就不需要了
+                ln /usr/bin/python3/python3.6 /usr/bin/python3/python
             
+    - setuptools的安装
             
+            1.下载地址：版本较旧，安装时可以安装新版本，直接复制下列地址进terminal即可
+                wget --no-check-certificate  https://pypi.python.org/packages/source/s/setuptools/setuptools-19.6.tar.gz#md5=c607dd118eae682c44ed146367a17e26
+            2.解压：
+                tar -zxvf setuptools-19.6.tar.gz
+            3.编译以及安装：
+                cd setuptools-19.6
+                python3 setup.py build
+                python3 setup.py install
+            4.如果安装失败，可能与Python3的安装有关，提前删除Python2的快捷方式，会导致yum不能使用，安装python3.7以上版本时，需要安装依赖yum install libffi-devel
+            
+    - pip安装
+    
+            1.下载地址：版本较旧，安装时可以安装新版本，直接复制下列地址进terminal即可
+                wget --no-check-certificate  https://pypi.python.org/packages/source/p/pip/pip-8.0.2.tar.gz#md5=3a73c4188f8dbad6a1e6f6d44d117eeb
+            2.解压：
+                tar -zxvf pip-8.0.2.tar.gz
+            3.编译以及安装：
+                cd pip-8.0.2
+                python3 setup.py build
+                python3 setup.py install 
+            4.升级pip
+                pip3 install --upgrade pip        

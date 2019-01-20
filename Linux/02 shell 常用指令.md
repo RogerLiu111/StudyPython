@@ -131,7 +131,12 @@
                     -o	逻辑或
                     !	逻辑非
                                 [root@rr ~]# find / !  -name temp -type f  查找不是temp的文件
-                            
+                                
+            找出所有用户yuxiang拥有的文件，并且把它们拷贝到/root/finder目录中
+                mkdir /root/finder
+                find / -user yuxiang -type f -exec cp {} /root/finder/ \;            -exec 表示类似"|"中转作用，{} 表示所有，\;表示以"\;"结尾
+                 
+                                             
     - alias：
         别名：为使用频率较高的命令，设置昵称，默认情况下，别名只在当前bash下可用，如果想要永久生效，需要额外设置
             
@@ -240,6 +245,8 @@
 	        压缩文件有2种格式：
 	                格式1：    .gz
 	                格式2：    .bz2
+	                格式3：    .xz
+	                格式4：    .tgz
 	                bz格式比gz格式压缩率更高，但是压缩时间更长。
 	        格式：
 	            制作归档文件：
@@ -264,6 +271,8 @@
 	            解压：
 	                tar -xzvf 【存放路径】 归档文件名.tar.gz [-c 解压目录(不写表示为当前目录)]
 	                tar -xjvf 【存放路径】 归档文件名.tar.bz2 [-c 解压目录(不写表示为当前目录)]
+	                tar -xvf 【存放路径】 归档文件名.tar.xz [-c 解压目录(不写表示为当前目录)]
+	                tar -xvf 【存放路径】 归档文件名.tar.tgz [-c 解压目录(不写表示为当前目录)]
 	                
 	                -x  解压
 	                -z  .gz格式
@@ -272,6 +281,8 @@
 	                
 	                tar -xzvf var.tar.gz
 	                tar -xjvf var.tar.bz2 -c text-1/
+	                tar -xvf Python-3.6.4.tar.xz                    # xz格式直接解压，不需要指定格式类型
+	                tar -xvf Python-3.6.4.tar.tgz                   # xz格式直接解压，不需要指定格式类型
 	                
 - 链接命令：
     
