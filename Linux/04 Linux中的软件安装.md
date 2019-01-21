@@ -56,7 +56,7 @@
                 
                 1.虚拟机挂载光盘信息
                 2.创建yum源路径             mkdir /mnt/cdrom
-                3.挂载光盘到yum路径下       mount /dev/cdrom /mnt/cdrom
+                3.挂载光盘到yum路径下       mount /dev/cdrom /mnt/cdrom          或者         mount /dev/sr0 /mnt/cdrom
                 4.修改yum配置文件
                     路径：/etc/yum.repos.d/
                     文件：vim dvd.repo
@@ -66,7 +66,7 @@
                         baseurl = file:///mnt/cdrom         # yum路径
                         gpgcheck = 0                        # 不校验yum软件包的签名信息
                         enabled = 1                         # 是否自动开机
-                5.yum repolist all          查看所有yum状态信息
+                5.yum repolist all          查看所有yum状态信息     yum状态需要为enable(绿色)
                 6.yum list all              列出所有的yum软件包
                 7.yum clean all             清除yum缓存
                 8.yum install 软件包名 -y   安装yum软件包
@@ -104,7 +104,7 @@
                 -v  显示安装过程的详细信息  
                 -h  显示安装进度，以#显示
                 
-                -U  （大写）升级某个rpm软件，若没有安装，则进行安装
+                -U  (大写)升级某个rpm软件，若没有安装，则进行安装
                 -F  更新某个RPM软件，若没有安装， 则放弃安装
                 
         卸载指定的rpm软件包
@@ -158,7 +158,7 @@
             4.添加bin目录到环境变量
                 vim /etc/profile
                 export PATH="$PATH:/usr/local/python3/bin"
-                source /etc/profile                         # 让配置文件立即生效（这条指令不输入，输入python3指令不能立刻找到python3）
+                source /etc/profile                         # 让配置文件立即生效(这条指令不输入，输入python3指令不能立刻找到python3)
             5.升级pip
                 pip3 install --upgrade pip 
             6.修改命令链接(可选)                            # 最好别改，改了yum路径有问题

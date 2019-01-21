@@ -2,11 +2,11 @@
 ## 概念：Shell是一种特殊的程序
 ## 作用：是内核与用户的一种接口
 ### Shell命令解释器
-- Shell一种解释型的语言（内部命令/外部命令）
-    - 内部命令：系统自带的，随系统内核一起启动（56种） cd（改变路径）
-	- 外部命令：就是一些额外的软件或者程序 ls（列出文件或者目录）
+- Shell一种解释型的语言(内部命令/外部命令)
+    - 内部命令：系统自带的，随系统内核一起启动(56种) cd(改变路径)
+	- 外部命令：就是一些额外的软件或者程序 ls(列出文件或者目录)
             
-            sh （Borurne Shell）	csh		ksh
+            sh (Borurne Shell)	csh		ksh
             *BASH 是rhel中默认的一种shell
 	
             [root@localhost Desktop]#
@@ -14,7 +14,7 @@
                 localhost：代表当前系统的主机名称
                 Desktop：代表当前所在的位置
                 #：代表当前登录用户是管理员用户
-                    root：管理员 administrator（windows中的管理员账号）
+                    root：管理员 administrator(windows中的管理员账号)
                 [root@192 ~]# su - student
 			
 	        1.su - username：切换当前登录				由root用户切换普通用户不需要密码
@@ -38,12 +38,12 @@
             5.关机操作方法：
                 poweroff
                 init 0
-                shutdown -h now现在关机（可以设置延时关机）
+                shutdown -h now现在关机(可以设置延时关机)
                 halt
 	        6.重启操作方法：
                 reboot
-                shutdown -r now现在重启（可以设置延时重启）
-                shutdown -r +15（15分钟后重启）
+                shutdown -r now现在重启(可以设置延时重启)
+                shutdown -r +15(15分钟后重启)
             7.data：查看当前系统时间
                 [root@rr ~]# date
                 Mon Jan  7 16:38:02 CST 2019
@@ -111,8 +111,8 @@
 		在Linux当中一切皆文本
 		
 ## 网络通讯的三种方法(有关于虚拟机VMWare的网络使用)
-- IP地址分类（IPV4）
-    - 作用：用来唯一标识网络中的某台设备（类似身份证号）
+- IP地址分类(IPV4)
+    - 作用：用来唯一标识网络中的某台设备(类似身份证号)
     
             采用点分十进制方法标识     ********.********.********.********
             全0全1        全1代表广播地址

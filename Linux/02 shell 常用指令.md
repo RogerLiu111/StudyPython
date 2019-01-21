@@ -14,17 +14,17 @@
 				EX：ls -l /home
 				
 ##Linux目录结构
-		boot：存放系统引导文件和内核文件（删了之后系统起不来了）
-		bin：存放可执行文件（二进制文件）（ls、cat、mkdir）
+		boot：存放系统引导文件和内核文件(删了之后系统起不来了)
+		bin：存放可执行文件(二进制文件)(ls、cat、mkdir)
 		sbin：root用户执行命令
 		home：存放普通用户的家目录
 		root：root用户的家目录
-		dev：放置所有设备文件（外设）	/dev/md*	/dev/sd*	/dev/hd*
-		etc：放置所有配置文件（服务）
-		lib/lib64：lib（普通用户）lib64（管理员）动态链接库文件（共享库）类似于.dll文件
+		dev：放置所有设备文件(外设)	/dev/md*	/dev/sd*	/dev/hd*
+		etc：放置所有配置文件(服务)
+		lib/lib64：lib(普通用户)lib64(管理员)动态链接库文件(共享库)类似于.dll文件
 		media：媒体库文件
 		opt：文件安装目录，安装软件就在opt目录下
-		mnt：挂载点目录 mount * *（用mount命令挂载）
+		mnt：挂载点目录 mount * *(用mount命令挂载)
 		var：存放一些需要改变数据的文件	日志、某些大文件的溢出区
 		proc：放的是内存的一个映射
 			   cat /proc/cpuinfo	#查看CPU运行状态
@@ -46,7 +46,7 @@
                 -a	显示所有文件目录信息,包括隐藏文件
                 -d	显示目录本身的属性
                 -h	显示详细信息,变换了统计单位
-                --color	以颜色区分不同类型的文件（默认显示的时候已经以颜色区分）
+                --color	以颜色区分不同类型的文件(默认显示的时候已经以颜色区分)
                 ll = ls -l
                 
     - cd：切换工作目录
@@ -56,18 +56,18 @@
                 相对路径：
                         cd ..返回上级目录	
                         cd - 返回前一次工作目录
-                        cd ../../ 返回上一级目录的上一级目录（最多返回到根目录）
+                        cd ../../ 返回上一级目录的上一级目录(最多返回到根目录)
                         cd ~返回到用户的家目录
                         
-    - pwd：查看当前所在的工作目录（告诉你自己在哪）
+    - pwd：查看当前所在的工作目录(告诉你自己在哪)
         
     - mkdir：创建一个新目录
     
-            格式：mkdir	【选项（-p）】【路径】（可加可不加，不加路径是当前目录）	目录名
+            格式：mkdir	【选项(-p)】【路径】(可加可不加，不加路径是当前目录)	目录名
                 -p 递归创建多级目录
                 mkdir	-p	b/c/d/e/f/g
                 
-    - rmdir：删除一个空目录（该命令用的很少）
+    - rmdir：删除一个空目录(该命令用的很少)
     
             格式：rmdir【选项】【目录或文件名】	
                 rmdir -p b/c/e/f/g
@@ -92,8 +92,8 @@
             
             格式：rm【选项】	文件或者目录
                 -r 递归删除整个目录树
-                -f 强制删除不给任何提示（慎用！！）
-            rm -rf * 当前目录下所有文件全部删除（尤其清理日志的时候，慎用！！）
+                -f 强制删除不给任何提示(慎用！！)
+            rm -rf * 当前目录下所有文件全部删除(尤其清理日志的时候，慎用！！)
             
     - mv：移动文件或者目录
            
@@ -101,7 +101,7 @@
             EX：	[root@localhost text]# ls
                     a.txt b.txt
                     [root@localhost text]# mv b.txt /root/text-2/
-            用法2：若移动目标位置与原位置相同（当前目录下操作），则此操作相当于重命名（改名）
+            用法2：若移动目标位置与原位置相同(当前目录下操作)，则此操作相当于重命名(改名)
             EX：	[root@localhost ~]# mv text text-1
             
     - find：用于查找文件或者目录
@@ -119,7 +119,7 @@
                             d	目录
                             b	块设备文件
                             c	字符设备文件
-                    -user	按文件属主查找（这个文件是谁的）
+                    -user	按文件属主查找(这个文件是谁的)
                                 [root@rr ~]# find / -user student -type f -name abc.test
                                 /home/student/abc.test
                     -size	按文件大小进行查找
@@ -135,49 +135,51 @@
             找出所有用户yuxiang拥有的文件，并且把它们拷贝到/root/finder目录中
                 mkdir /root/finder
                 find / -user yuxiang -type f -exec cp {} /root/finder/ \;            -exec 表示类似"|"中转作用，{} 表示所有，\;表示以"\;"结尾
-                 
-                                             
-    - alias：
-        别名：为使用频率较高的命令，设置昵称，默认情况下，别名只在当前bash下可用，如果想要永久生效，需要额外设置
-            
-            查看当前用户所有别名
-                [root@rr ~]# alias
-                alias cp='cp -i'
-                alias egrep='egrep --color=auto'
-                alias fgrep='fgrep --color=auto'
-                alias grep='grep --color=auto'
-                alias l.='ls -d .* --color=auto'
-                alias ll='ls -l --color=auto'
-                alias ls='ls --color=auto'
-                alias mv='mv -i'
-                alias rm='rm -i'
-                alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
-
-            设置别名
-                alias 别名=“实际执行的命令”
-                    alias aa=head -n -5 anaconda-ks.cfg     （aa就是后面那条命令的别名）
-            取消别名
-                unalias 别名
-                    unalias aa 
-                    unalias -a  （取消所有别名）
-            让别名永久生效
-                将别名设置在~/.bashrc文件中
-                    gedit .bashrc   输入命令后在其他别名中间输入也可以，在末尾输入也行
-                    
-                        # .bashrc
+            在当前目录下查找除了目录以外的所有类型文件
+                find . ! -type d                                # 取非排除所有目录文件，'.'表示当前目录的含义
+            查找文件更改时间比文件a.txt新但比b.txt文件旧的文件(补充知识点-newer)
+                find / -newer a.txt ! -newer b.txt
+                                                             
+    - alias：别名：为使用频率较高的命令，设置昵称，默认情况下，别名只在当前bash下可用，如果想要永久生效，需要额外设置
+                
+                查看当前用户所有别名
+                    [root@rr ~]# alias
+                    alias cp='cp -i'
+                    alias egrep='egrep --color=auto'
+                    alias fgrep='fgrep --color=auto'
+                    alias grep='grep --color=auto'
+                    alias l.='ls -d .* --color=auto'
+                    alias ll='ls -l --color=auto'
+                    alias ls='ls --color=auto'
+                    alias mv='mv -i'
+                    alias rm='rm -i'
+                    alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
     
-                        # User specific aliases and functions
+                设置别名
+                    alias 别名=“实际执行的命令”
+                        alias aa=head -n -5 anaconda-ks.cfg     (aa就是后面那条命令的别名)
+                取消别名
+                    unalias 别名
+                        unalias aa 
+                        unalias -a  (取消所有别名)
+                让别名永久生效
+                    将别名设置在~/.bashrc文件中
+                        gedit .bashrc   输入命令后在其他别名中间输入也可以，在末尾输入也行
                         
-                        alias rm='rm -i'
-                        alias cp='cp -i'
-                        alias mv='mv -i'
-                        # alias aa=head -n -5 anaconda-ks.cfg（在此输入）
-                        
-                        # Source global definitions
-                        if [ -f /etc/bashrc ]; then
-                            . /etc/bashrc
-                        fi
-                        # alias aa=head -n -5 anaconda-ks.cfg（在此输入）
+                            # .bashrc
+        
+                            # User specific aliases and functions
+                            
+                            alias rm='rm -i'
+                            alias cp='cp -i'
+                            alias mv='mv -i'
+                            # alias aa=head -n -5 anaconda-ks.cfg(在此输入)
+                            
+                            # Source global definitions
+                            if [ -f /etc/bashrc ]; then
+                                . /etc/bashrc
+                            fi
+                            # alias aa=head -n -5 anaconda-ks.cfg(在此输入)
                 
 - 文件内容操作命令：
 	
@@ -185,7 +187,7 @@
 	        
 	        格式：cat filename
 	
-	- less/more：全屏方式分页显示文件内容（使用more命令时，下方会显示阅读百分比）
+	- less/more：全屏方式分页显示文件内容(使用more命令时，下方会显示阅读百分比)
 	        
 	        格式：less/more filename
 	        
@@ -213,8 +215,8 @@
 	        选项：
 	            -w 统计字数 一个字被定义为由空白，跳格，换行以这些为分割字符串
 	            -l 统计行数
-	            -c 统计字节数（-m 和 -c 不能同时使用）
-	            -m 统计字符数（-m 和 -c 不能同时使用）
+	            -c 统计字节数(-m 和 -c 不能同时使用)
+	            -m 统计字符数(-m 和 -c 不能同时使用)
 	            -L 打印最长行的长度
 	            man wc
 	            wc --help
@@ -228,7 +230,7 @@
             选项：
 	            -c 显示匹配行数
 	            -i 查找时，不区分大小写
-	            -v 反转查找（显示不包含查找字符串的行）
+	            -v 反转查找(显示不包含查找字符串的行)
 	            -cv 显示不包含指定字符串的行数
 
             查找条件设置：
@@ -238,10 +240,24 @@
                 [root@rr ~]# grep '^$' anaconda-ks.cfg -c       查找空行数量
                 [root@rr ~]# grep '^$' anaconda-ks.cfg -cv      查找不包含空行的数量
                 [root@rr ~]# grep '^#' anaconda-ks.cfg          查找以#号开头的行
+                
+            统计initial-setup-ks.cfg文件中含有'boot'的行数
+                [root@rr ~]# grep 'boot' /root/initial-setup-ks.cfg | wc -l         # 方法1
+                [root@rr ~]# grep 'boot' /root/initial-setup-ks.cfg -c              # 方法2
+            返回initial-setup-ks.cfg文件中含有'boot'的行号
+                [root@rr ~]# grep 'boot' /root/initial-setup-ks.cfg -n
+            执行ps -aux命令，将文件内容保存到/root/ps.log中，查找该文件中包含3044和3047字符串的行
+                ps aux > /root/ps.log
+                grep '304[47]' /root/ps.log                     此处使用正则"304[47]"，意思是匹配3044与3047
+            在ps.log文件中，查找包含一串包含4位数的字符串，并且这个字符串最后一个数字为2
+                grep '[0-9][0-9][0-9]2' /root/ps.log                                
+                grep '[0-9][0-9][0-9]...2' /root/ps.log                             # '...'可以表示任何字符
+            
 	            
 - 归档以及压缩命令：
 
 	- tar：压缩与解压缩    制作归档文件和释放归档文件
+	        
 	        压缩文件有2种格式：
 	                格式1：    .gz
 	                格式2：    .bz2
@@ -284,30 +300,28 @@
 	                tar -xvf Python-3.6.4.tar.xz                    # xz格式直接解压，不需要指定格式类型
 	                tar -xvf Python-3.6.4.tar.tgz                   # xz格式直接解压，不需要指定格式类型
 	                
-- 链接命令：
-    
-    - ln：---->  link    链接
+    - ln：---->  link    链接命令(相当于快捷方式)
         
             链接有两种：
                 软连接 ln -s 源文件 目标文件
                     类似于创建快捷方式，权限对所有人开放，删除源文件后，快捷方式不可打开
-                硬链接 ln 源文件 目标文件（类似于 cp -p +同步更新 权限也一模一样）
-	                类似于 （cp -p +同步更新），权限与源文件一样，删除源文件后，硬链接就只是一个备份，依旧可以使用，但是重新创建新的文件和原来的链接文件同名，不会再次形成链接
+                硬链接 ln 源文件 目标文件(类似于 cp -p +同步更新 权限也一模一样)
+	                类似于 (cp -p +同步更新)，权限与源文件一样，删除源文件后，硬链接就只是一个备份，依旧可以使用，但是重新创建新的文件和原来的链接文件同名，不会再次形成链接
 			
 ##Linux中如何获得命令帮助：
-		1.	help（内部命令）cd，kill	56条
+		1.	help(内部命令)cd，kill	56条
 				EX：help cd
-			--help（适用于大多数外部命令查找）
+			--help(适用于大多数外部命令查找)
 			    EX：ls --help
 			
-		2.	使用man手册进行命令查看（man：命令阅读手册）
+		2.	使用man手册进行命令查看(man：命令阅读手册)
 				man 命令字
 				上下键滚动文本
 				Page down & Page up上下翻页
 				空格也支持翻页,回车走一行
 				输入/,可以查找
 				
-		3.	info也可以进行命令帮助查找（使用与man接近）
+		3.	info也可以进行命令帮助查找(使用与man接近)
 			
 		4.	pinfo 命令名称
 				以浏览器的形式查看详细的GUN信息
@@ -325,7 +339,7 @@
         
         3+  filename    其他文件    读/写
         
-        在Linux中构建了一个带有编号标记的通道（文件描述符）的进程结构来管理打开文件通过进程链接到文件，进行文件数据的操作。
+        在Linux中构建了一个带有编号标记的通道(文件描述符)的进程结构来管理打开文件通过进程链接到文件，进行文件数据的操作。
         
         类型              操作符                             用途                                  
         重定向标准输出     (1)>     将命令的执行结果输出到指定文件中，而不是显示在屏幕上，覆盖写      history > history.txt
