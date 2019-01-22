@@ -67,6 +67,9 @@
                 -p 递归创建多级目录
                 mkdir	-p	b/c/d/e/f/g
                 
+            创建以下几个目录teach,office,finance,admin,market
+                mkdir -p /share/{teach,office,finiance,admin,market}
+                
     - rmdir：删除一个空目录(该命令用的很少)
     
             格式：rmdir【选项】【目录或文件名】	
@@ -206,6 +209,9 @@
 	        
 	        注意：符号的使用 + - 代表意思不同
 	        
+            查看文件initial-setup-ks.cfg末尾的2KB内容
+                tail -c 2K /root/initial-setup-ks.cfg
+	                
 	- wc：默认情况下统计文件内容的：行数 词数 字节数 文件名
 	       
 	        格式：wc 【选项】 filename
@@ -299,6 +305,14 @@
 	                tar -xjvf var.tar.bz2 -c text-1/
 	                tar -xvf Python-3.6.4.tar.xz                    # xz格式直接解压，不需要指定格式类型
 	                tar -xvf Python-3.6.4.tar.tgz                   # xz格式直接解压，不需要指定格式类型
+	            
+	            压缩系统的/home目录，使用zip格式压缩，并且命名为student.tar.gz，此文件要放在/tmp/rhel7目录下
+	                [root@rr ~]# mkdir /tmp/rhel7
+                    [root@rr rhel7]# tar -czvf ./student.tar.gz /home/
+                
+                补充 gzip与bzip2 命令，压缩与解压缩(-d)
+                这两个只能压缩文件，不能压缩目录(用这个方法压缩的文件，不能用tar解压)
+                直接压缩，会删除源文件
 	                
     - ln：---->  link    链接命令(相当于快捷方式)
         
