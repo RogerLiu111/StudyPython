@@ -76,3 +76,23 @@
                 在VIM中打开新的文件或者读入新的内容：
                     :e /root/a.txt  在编辑当前文件时，切换新的文件进行编辑
                     :r /root/b.txt  在编辑当前文件时，导入新的文件内容
+                    
+    - Ex：用三种方法在文件hello.txt中增加一行内容
+            
+            vim/gedit hello.txt
+            echo 'sasg' >> hello.txt
+            cat >> hello.txt << END
+            
+                [root@rr ~]# cat >> aa.txt << END
+                > asd
+                > fhgfh
+                > dfgfhfgh
+                > END                               # 停止输入时，输入END，这里的END可以换成任意字符，结尾输入即结束
+                [root@rr ~]# cat aa.txt
+                print('hello,Q')
+                asd
+                fhgfh
+                dfgfhfgh
+
+                    
+                

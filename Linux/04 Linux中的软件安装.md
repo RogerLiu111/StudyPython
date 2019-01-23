@@ -188,4 +188,17 @@
                 python3 setup.py build
                 python3 setup.py install 
             4.升级pip
-                pip3 install --upgrade pip        
+                pip3 install --upgrade pip
+                
+    - Tree工具包与http服务
+    
+            1.配置yum源
+            2.yum install tree
+            3.yum install httpd
+            
+            Apache配置文件路径
+                
+                /etc/httpd/conf/httpd.conf
+            保存别名
+                打开/etc/bashrc文件，在最后一行添加命令
+                alias confighttp='vim /etc/httpd/conf/httpd.conf'   输入完后不会立即生效，需要使用su命令，刷新一下bash

@@ -129,6 +129,9 @@
                                 [root@rr ~]# find / -user student -type f -name abc.test
                             在var目录下，查找大于10K小于15K的文件
                                 [root@rr ~]# find /var/ -size +10k -type f -size -15k -type f
+                    -mtime  修改时间查找
+                            在当前目录下的目录和普通文件，目录下10天没有改变，大小大于4K的普通文件或目录
+                                [root@rr ~]# find ./ -type d -o -type f ! -mtime -10 -size -4k
                                 
                     -a	逻辑与
                     -o	逻辑或
@@ -183,6 +186,21 @@
                                 . /etc/bashrc
                             fi
                             # alias aa=head -n -5 anaconda-ks.cfg(在此输入)
+    
+    - stat：查看文件状态命令
+        - 格式：stat 文件路径
+                
+                [root@rr ~]# stat ./anaconda-ks.cfg 
+                  File: ‘./anaconda-ks.cfg’
+                  Size: 1694      	Blocks: 8          IO Block: 4096   regular file
+                Device: fd00h/64768d	Inode: 33574978    Links: 1
+                Access: (0600/-rw-------)  Uid: (    0/    root)   Gid: (    0/    root)
+                Context: system_u:object_r:admin_home_t:s0
+                Access: 2019-01-14 21:02:40.552698916 +0800
+                Modify: 2019-01-07 12:36:27.741966057 +0800
+                Change: 2019-01-07 12:36:27.741966057 +0800
+                 Birth: -
+
                 
 - 文件内容操作命令：
 	
