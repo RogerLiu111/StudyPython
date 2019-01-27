@@ -338,7 +338,7 @@
 11. 使用RAID组：
             
             echo"这是一个RAID0阵列测试文件" > /mnt/raid0/test.txt
-12. 模拟RAID6下，磁盘故障，更换热备盘，以及自动同步数据
+### 模拟RAID6下，磁盘故障，更换热备盘，以及自动同步数据
             
             [root@rr mnt]# mdadm --detail /dev/md6                              # 查看原先RAID组没有故障
             /dev/md6:
@@ -452,3 +452,72 @@
             
             [root@rr mnt]# mdadm /dev/md6 --add /dev/sde1                   # 将修复或新的磁盘添加回RAID6中
             mdadm: added /dev/sde1      
+
+### RAID5实现过程以及故障模拟(纯指令)
+1. 检查环境并添加磁盘
+
+        mdadm命令是否存在
+        添加所需磁盘
+        检查磁盘是否已经存在raid
+            mdadm -E /dev/sd[b-e]
+2. 对磁盘进行分区，并将磁盘分区类型改为fd（raid模式），fdisk进行磁盘分区，并将磁盘分区类型定义为RAID类型，让分区立即生效
+        
+        partx -a /dev/sd[b-e]   ==  partprobe  /dev/sd[b-e]     # 这两条都可以
+3. 分区创建完成后继续检查环境
+    
+        mdadm -E /dev/sd[b-e]1
+4. 创建RAID组，此处创建RAID5
+    
+        mdadm -C /dev/md5 -l 5 -n 3 -x 1 /dev/sd[b-e]1
+5. 实时查看创建动态
+    
+        watch -n1 cat /proc/mdstat
+6. 查看RAID组详细信息
+    
+        mdadm --detail /dev/md5
+7. 创建文件系统并进行使用RAID组
+      
+        mkfs -t ext4 /dev/md5 
+        mkdir /mnt/raid5
+        vim /etc/fstab 
+        /dev/md5	/mnt/raid5	ext4	defaults	 0 0
+        mount -a
+        df -hT
+        
+        echo 'Hello World' > /mnt/raid5/test.conf
+8. 写入RAID组配置文件
+        
+        mdadm --detail --scan --verbose  >>  /etc/mdadm.conf
+9. 故障模拟
+    1. 模拟硬盘损坏
+        
+        mdadm  /dev/md5  --fail /dev/sdb1
+    2. 在存在热备盘的情况下，RAID自动重构，若没有热背盘，故障盘数在RAID组冗余范围内，则依旧工作，只不过状态为降级状态
+
+             Layout : left-symmetric
+                 Chunk Size : 512K
+    
+             Rebuild Status : 10% complete
+    
+                       Name : localhost.localdomain:5  (local to host localhost.localdomain)
+                       UUID : 7f1515d8:a3ae73db:efd31682:599d63a4
+                     Events : 25
+    
+                Number   Major   Minor   RaidDevice State
+                   3       8       65        0      spare rebuilding   /dev/sde1
+                   1       8       33        1      active sync   /dev/sdc1
+                   4       8       49        2      active sync   /dev/sdd1
+    
+                   0       8       17        -      faulty   /dev/sdb1
+    3. 移除故障盘
+        
+        mdadm /dev/md5 --remove /dev/sdb1
+    4. 修复故障磁盘
+        
+        mdadm --zero-superblock --force /dev/sdb1
+    5. 将新的工作磁盘（此为热备）加入到RAID组中
+        
+        mdadm /dev/md5 --add /dev/sdb1
+    6. 检查RAID组状态
+        
+        mdadm  --detail /dev/md5
