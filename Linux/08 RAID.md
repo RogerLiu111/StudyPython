@@ -139,7 +139,7 @@
             --level == -l               设置RAID组级别
             --raid-devices == -n        设置设备活动个数
             --spare-devices == -x       设置备用盘的个数
-            --chunk == -c               chunk默认64K
+            --chunk == -c               chunk默认512K
     - Monitor：监控模式，监控RAID状态，可以实现全局热备
             
             --follow == -F              选择监控模式
@@ -164,7 +164,7 @@
 ### RAID 0实现过程
 1. 进行软件安装及更新
     
-        yum install mdadm
+        yum install mdadm                                                       # 默认安装好了
 2. 准备两块raid 0的成员盘并进行分区
         
         fdisk /dev/sdb
@@ -189,6 +189,8 @@
         The partition table has been altered!
 			
         fdisk /dev/sdc  同上
+        
+        [root@rr ~]# partprobe /dev/sd[e-i]
 3. 准备完磁盘后，检查磁盘是否正确定义RAID
         
         [root@localhost ~]# mdadm --examine /dev/sd[b-c]            # 检查磁盘是否完成RAID格式化与是否已经存在RAID
@@ -205,6 +207,9 @@
         
         mdadm -C /dev/md0 -l raid0 -n 2 /dev/sdb1 /dev/sdc1
         mdadm -C /dev/md0 -l raid0 -n 2 /dev/sd[b-c]1
+        
+        [root@rr ~]# watch -n1 cat /proc/mdstat                     # 可以实时查看RAID创建的过程，-n1表示每秒刷新一次
+
 5. 查看RAID组的状态信息：
        
         [root@rr ~]# cat /proc/mdstat
@@ -297,7 +302,7 @@
             
                 Number   Major   Minor   RaidDevice State
                    0       8       17        0      active sync   /dev/sdb1
-                   1       8       33        1      active sync   /dev/sdc1
+                   1       8       33        1      active sync   /dev/sdc1 
 8. 针对RAID组进行创建文件系统
     
             mkfs -t ext4 /dev/md0
@@ -333,4 +338,117 @@
 11. 使用RAID组：
             
             echo"这是一个RAID0阵列测试文件" > /mnt/raid0/test.txt
+12. 模拟RAID6下，磁盘故障，更换热备盘，以及自动同步数据
             
+            [root@rr mnt]# mdadm --detail /dev/md6                              # 查看原先RAID组没有故障
+            /dev/md6:
+                       Version : 1.2
+                 Creation Time : Sun Jan 27 19:42:32 2019
+                    Raid Level : raid6
+                    Array Size : 41906176 (39.96 GiB 42.91 GB)
+                 Used Dev Size : 20953088 (19.98 GiB 21.46 GB)
+                  Raid Devices : 4
+                 Total Devices : 5
+                   Persistence : Superblock is persistent
+            
+                   Update Time : Sun Jan 27 20:28:19 2019
+                         State : clean 
+                Active Devices : 4
+               Working Devices : 5
+                Failed Devices : 0
+                 Spare Devices : 1
+            
+                        Layout : left-symmetric
+                    Chunk Size : 512K
+            
+            Consistency Policy : resync
+            
+                          Name : rr:6  (local to host rr)
+                          UUID : 416a4eb3:68aed09e:d904d838:83f294e5
+                        Events : 17
+            
+                Number   Major   Minor   RaidDevice State                   # 重点关注一下几块磁盘状态                                  
+                   0       8       65        0      active sync   /dev/sde1
+                   1       8       81        1      active sync   /dev/sdf1
+                   2       8       97        2      active sync   /dev/sdg1
+                   3       8      113        3      active sync   /dev/sdh1
+            
+                   4       8      129        -      spare   /dev/sdi1
+            [root@rr mnt]# mdadm /dev/md6 --fail /dev/sde1                  # 设置故障点
+            mdadm: set /dev/sde1 faulty in /dev/md6
+            [root@rr mnt]# mdadm --detail /dev/md6
+            /dev/md6:
+                       Version : 1.2
+                 Creation Time : Sun Jan 27 19:42:32 2019
+                    Raid Level : raid6
+                    Array Size : 41906176 (39.96 GiB 42.91 GB)
+                 Used Dev Size : 20953088 (19.98 GiB 21.46 GB)
+                  Raid Devices : 4
+                 Total Devices : 5
+                   Persistence : Superblock is persistent
+            
+                   Update Time : Sun Jan 27 20:31:40 2019
+                         State : clean, degraded, recovering 
+                Active Devices : 3
+               Working Devices : 4
+                Failed Devices : 1
+                 Spare Devices : 1
+            
+                        Layout : left-symmetric
+                    Chunk Size : 512K
+            
+            Consistency Policy : resync
+            
+                Rebuild Status : 2% complete
+            
+                          Name : rr:6  (local to host rr)
+                          UUID : 416a4eb3:68aed09e:d904d838:83f294e5
+                        Events : 19
+            
+                Number   Major   Minor   RaidDevice State                   # 由于sde1故障，热备盘sdi1被更换上
+                   4       8      129        0      spare rebuilding   /dev/sdi1
+                   1       8       81        1      active sync   /dev/sdf1
+                   2       8       97        2      active sync   /dev/sdg1
+                   3       8      113        3      active sync   /dev/sdh1
+            
+                   0       8       65        -      faulty   /dev/sde1      # sde1故障
+
+            [root@rr mnt]# mdadm /dev/md6 --remove /dev/sde1                # 剔除原有故障磁盘，之后会重新格式化，然后加入
+            mdadm: hot removed /dev/sde1 from /dev/md6
+            [root@rr mnt]# mdadm --detail /dev/md6
+            /dev/md6:
+                       Version : 1.2
+                 Creation Time : Sun Jan 27 19:42:32 2019
+                    Raid Level : raid6
+                    Array Size : 41906176 (39.96 GiB 42.91 GB)
+                 Used Dev Size : 20953088 (19.98 GiB 21.46 GB)
+                  Raid Devices : 4
+                 Total Devices : 4
+                   Persistence : Superblock is persistent
+            
+                   Update Time : Sun Jan 27 20:56:01 2019
+                         State : clean 
+                Active Devices : 4
+               Working Devices : 4
+                Failed Devices : 0
+                 Spare Devices : 0
+            
+                        Layout : left-symmetric
+                    Chunk Size : 512K
+            
+            Consistency Policy : resync
+            
+                          Name : rr:6  (local to host rr)
+                          UUID : 416a4eb3:68aed09e:d904d838:83f294e5
+                        Events : 37
+            
+                Number   Major   Minor   RaidDevice State                   # 已经剔除故障磁盘
+                   4       8      129        0      active sync   /dev/sdi1
+                   1       8       81        1      active sync   /dev/sdf1
+                   2       8       97        2      active sync   /dev/sdg1
+                   3       8      113        3      active sync   /dev/sdh1
+
+            [root@rr mnt]# mdadm --zero-superblock --force /dev/sde1        # 强制写0，修复故障磁盘
+            
+            [root@rr mnt]# mdadm /dev/md6 --add /dev/sde1                   # 将修复或新的磁盘添加回RAID6中
+            mdadm: added /dev/sde1      
